@@ -1,151 +1,115 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Ensure React Router is installed
+import React, {useState} from "react";
+import DeleteActions from "./Delete";
+import EditActions from "./Edit";
+import LogoutButton from "./Logout";
 
 const App = () => {
-  const [title, setTitle] = useState("");
-  const [titleList, setTitleList] = useState([]);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
+    const [title, setTitle] = useState("");  // Title input field state
+    const [titleList, setTitleList] = useState([]);  // List of saved titles
+    const [isEditing, setIsEditing] = useState(false);  // To check if we are editing an existing title
+    const [editIndex, setEditIndex] = useState(null);  // To track the index of the title being edited
 
-  const navigate = useNavigate(); // React Router ka use karein
+    const handleCreate = () => {
+        setTitleList([...titleList, title]);  // Add the title to the list
+        setTitle("");  // Clear the input
+    };
 
-  const handleCreate = () => {
-    setTitleList([...titleList, title]);
-    setTitle("");
-  };
+    const handleUpdate = () => {
+        setTitleList((prevState) =>
+            prevState.map((item, index) =>
+                index === editIndex ? title : item  // Update the title at the specific index
+            )
+        );
 
-  const handleUpdate = () => {
-    setTitleList((prevState) =>
-      prevState.map((item, index) =>
-        index === editIndex ? title : item
-      )
-    );
-    setIsEditing(false);
-    setTitle("");
-    setEditIndex(null);
-  };
+        setIsEditing(false);  // Stop editing
+        setTitle("");  // Clear the input
+        setEditIndex(null);  // Reset editIndex
+    };
 
-  const handleDelete = (index) => {
-    setTitleList((prevState) =>
-      prevState.filter((item, i) => i !== index)
-    );
-  };
 
-  const handleDeleteAll = () => {
-    setTitleList([]);
-  };
+    const handleDelete = (index) => {
+        setTitleList((prevState) =>
+            prevState.filter((item, i) => i !== index)  // Remove the title at the specific index
+        );
+    };
 
-  const handleSave = () => {
-    if (isEditing) {
-      handleUpdate();
-    } else {
-      handleCreate();
-    }
-  };
 
-  const handleLogout = () => {
-    // React Router ka use karein (Agar routing hai)
-    navigate("/login");
+    const handleSave = () => {
+        if (isEditing) {
+            handleUpdate();  // If editing, update the title
+        } else {
+            handleCreate();  // If not editing, create a new title
+        }
+    };
+    const handleLogout = () => {
+        localStorage.removeItem("token");  // Remove the token from local storage
+        window.location.href = "/";  // Redirect to the login page
+    };
 
-    // Ya simple redirect use karein
-    // window.location.href = "/login";
-  };
+    const handleDeleteAll = () => {
+        setTitleList([]);  // Clear the title list
+    };
 
-  return (
-    <div style={{ margin: "50px" }}>
-      <h2>Note lists</h2>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Enter Title"
-        style={{ padding: "8px", marginBottom: "10px", width: "300px" }}
-      />
-      <div>
-        <button
-          onClick={handleSave}
-          style={{
-            margin: "5px",
-            padding: "10px",
-            backgroundColor: "green",
-            color: "white",
-          }}
-        >
-          {isEditing ? "Update" : "Create"} Title
-        </button>
-      </div>
-
-      <div>
-        {titleList.length > 0 && (
-          <ul>
-            {titleList.map((item, index) => (
-              <li key={index} style={{ marginBottom: "10px" }}>
-                <h3>{item}</h3>
+    return (
+        <div style={{margin: "50px"}}>
+            <h2>Note lists</h2>
+            <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}  // Update input value
+                placeholder="Enter Title"
+                style={{padding: "8px", marginBottom: "10px", width: "300px"}}
+            />
+            <div>
                 <button
-                  onClick={() => {
-                    setIsEditing(true);
-                    setEditIndex(index);
-                    setTitle(item);
-                  }}
-                  style={{
-                    margin: "5px",
-                    padding: "8px",
-                    backgroundColor: "blue",
-                    color: "white",
-                  }}
+                    onClick={handleSave}
+                    style={{
+                        margin: "5px",
+                        padding: "10px",
+                        backgroundColor: "green",
+                        color: "white",
+                    }}
                 >
-                  Edit
+                    {isEditing ? "Update" : "Create"} Title
                 </button>
-                <button
-                  onClick={() => handleDelete(index)}
-                  style={{
-                    margin: "5px",
-                    padding: "8px",
-                    backgroundColor: "red",
-                    color: "white",
-                  }}
-                >
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+            </div>
 
-      {/* Delete All Button */}
-      <div>
-        {titleList.length > 0 && (
-          <button
-            onClick={handleDeleteAll}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "darkred",
-              color: "white",
-            }}
-          >
-            Delete All Titles
-          </button>
-        )}
-      </div>
+            <div>
+                {titleList.length > 0 && (
+                    <ul>
+                        {titleList.map((item, index) => (
+                            <li key={index} style={{marginBottom: "10px"}}>
+                                <h3>{item}</h3>
 
-      {/* Logout Button */}
-      <div>
-        <button
-          onClick={handleLogout}
-          style={{
-            marginTop: "20px",
-            padding: "10px",
-            backgroundColor: "black",
-            color: "white",
-          }}
-        >
-          Logout
-        </button>
-      </div>
-    </div>
-  );
+                                <button
+                                    onClick={() => handleDelete(index)}  // Delete specific title
+                                    style={{
+                                        margin: "5px",
+                                        padding: "8px",
+                                        backgroundColor: "red",
+                                        color: "white",
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                                <EditActions
+                                    item={item}
+                                    index={index}
+                                    setIsEditing={setIsEditing}
+                                    setEditIndex={setEditIndex}
+                                    setTitle={setTitle}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                )}
+
+            </div>
+            <LogoutButton handleLogout={handleLogout}/>
+            {/* Delete All Button */}
+            <DeleteActions titleList={titleList} handleDeleteAll={handleDeleteAll}/>
+        </div>
+    );
 };
 
 export default App;
