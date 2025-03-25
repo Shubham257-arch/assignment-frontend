@@ -3,6 +3,8 @@ import DeleteActions from "./Delete";
 import EditActions from "./Edit";
 import logoutButton from "./Logout";
 
+
+
 const App = () => {
     const [title, setTitle] = useState("");  // Title input field state
     const [titleList, setTitleList] = useState([]);  // List of saved titles
@@ -32,6 +34,7 @@ const App = () => {
             prevState.filter((item, i) => i !== index)  // Remove the title at the specific index
         );
     };
+
 
 
     const handleSave = () => {
