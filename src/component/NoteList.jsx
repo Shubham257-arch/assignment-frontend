@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import DeleteActions from "./Delete";
-import EditActions from "./Edit";
+import EditActions from "./edit";
 import logoutButton from "./Logout";
 
 
