@@ -1,62 +1,64 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import DeleteActions from "./Delete";
 import EditActions from "./Edit";
 import LogoutButton from "./Logout";
 
-const NoteList = () => {
-    const [title, setTitle] = useState("");  
-    const [titleList, setTitleList] = useState([]);  
-    const [isEditing, setIsEditing] = useState(false); 
-    const [editIndex, setEditIndex] = useState(null);
+const App = () => {
+    const [title, setTitle] = useState("");  // Title input field state
+    const [titleList, setTitleList] = useState([]);  // List of saved titles
+    const [isEditing, setIsEditing] = useState(false);  // To check if we are editing an existing title
+    const [editIndex, setEditIndex] = useState(null);  // To track the index of the title being edited
 
     const handleCreate = () => {
-        setTitleList([...titleList, title]);  
-        setTitle("");  
+        setTitleList([...titleList, title]);  // Add the title to the list
+        setTitle("");  // Clear the input
     };
 
     const handleUpdate = () => {
         setTitleList((prevState) =>
             prevState.map((item, index) =>
-                index === editIndex ? title : item 
+                index === editIndex ? title : item  // Update the title at the specific index
             )
         );
-        setIsEditing(false);  
-        setTitle("");  
-        setEditIndex(null);  
+
+        setIsEditing(false);  // Stop editing
+        setTitle("");  // Clear the input
+        setEditIndex(null);  // Reset editIndex
     };
+
 
     const handleDelete = (index) => {
         setTitleList((prevState) =>
-            prevState.filter((item, i) => i !== index) 
+            prevState.filter((item, i) => i !== index)  // Remove the title at the specific index
         );
     };
 
+
     const handleSave = () => {
         if (isEditing) {
-            handleUpdate();  
+            handleUpdate();  // If editing, update the title
         } else {
-            handleCreate();  
+            handleCreate();  // If not editing, create a new title
         }
     };
-
     const handleLogout = () => {
-        localStorage.removeItem("token");  
-        window.location.href = "/";  
+        localStorage.removeItem("token");  // Remove the token from local storage
+        window.location.href = "/";  // Redirect to the login page
     };
 
     const handleDeleteAll = () => {
-        setTitleList([]);  
+        setTitleList([]);  // Clear the title list
     };
 
     return (
-        <div style={{ margin: "50px" }}>
+        <div style={{margin: "50px"}}>
             <h2>Note lists</h2>
             <input
                 type="text"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => setTitle(e.target.value)}  // Update input value
                 placeholder="Enter Title"
-                style={{ padding: "8px", marginBottom: "10px", width: "300px" }}
+                style={{padding: "8px", marginBottom: "10px", width: "300px"}}
             />
             <div>
                 <button
@@ -76,12 +78,11 @@ const NoteList = () => {
                 {titleList.length > 0 && (
                     <ul>
                         {titleList.map((item, index) => (
-                            <li key={index} style={{ marginBottom: "10px" }}>
+                            <li key={index} style={{marginBottom: "10px"}}>
                                 <h3>{item}</h3>
 
-                                {/* Edit and Delete buttons for each note */}
                                 <button
-                                    onClick={() => handleDelete(index)}
+                                    onClick={() => handleDelete(index)}  // Delete specific title
                                     style={{
                                         margin: "5px",
                                         padding: "8px",
@@ -102,14 +103,13 @@ const NoteList = () => {
                         ))}
                     </ul>
                 )}
-            </div>
 
-            {/* Logout button */}
-            <LogoutButton handleLogout={handleLogout} />
+            </div>
+            <LogoutButton handleLogout={handleLogout}/>
             {/* Delete All Button */}
-            <DeleteActions titleList={titleList} handleDeleteAll={handleDeleteAll} />
+            <DeleteActions titleList={titleList} handleDeleteAll={handleDeleteAll}/>
         </div>
     );
 };
 
-export default NoteList;
+export default App;
