@@ -23,3 +23,4 @@ yarn-debug.log*
 yarn-error.log*
 # Add to .gitignore if not already present
 node_modules/
+
