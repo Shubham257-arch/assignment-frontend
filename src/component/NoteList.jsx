@@ -2,8 +2,9 @@ import React, {useState} from "react";
 import DeleteActions from "./Delete";
 import EditActions from "./Edit";
 import LogoutButton from "./Logout";
+import ViewList from "./ViewList";
 
-const App = () => {
+const NoteList = () => {
     const [title, setTitle] = useState("");  // Title input field state
     const [titleList, setTitleList] = useState([]);  // List of saved titles
     const [isEditing, setIsEditing] = useState(false);  // To check if we are editing an existing title
@@ -105,6 +106,15 @@ const App = () => {
                 )}
 
             </div>
+
+                        <ViewList
+                titleList={titleList}
+                handleDelete={handleDelete}
+                setIsEditing={setIsEditing}
+                setEditIndex={setEditIndex}
+                setTitle={setTitle}
+            />
+
             <LogoutButton handleLogout={handleLogout}/>
             {/* Delete All Button */}
             <DeleteActions titleList={titleList} handleDeleteAll={handleDeleteAll}/>
@@ -112,4 +122,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default NoteList;
