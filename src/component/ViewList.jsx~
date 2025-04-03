@@ -1,7 +1,7 @@
 // components/ViewList.jsx
 import React from "react";
 import EditActions from "./Edit";  // Assuming EditActions is in the same folder
-// Assuming DeleteActions is in the same folder
+import DeleteActions from "./Delete";  // Assuming DeleteActions is in the same folder
 
 const ViewList = ({ titleList, handleDelete, setIsEditing, setEditIndex, setTitle }) => {
     return (
