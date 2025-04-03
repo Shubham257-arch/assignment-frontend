@@ -37,10 +37,12 @@
     ]
   },
   "jest": {
-    "transformIgnorePatterns": [
-      "/node_modules/(?!axios)/"
-    ]
+  "transform": {
+    "^.+\\.[t|j]sx?$": "babel-jest"
   },
+  "testEnvironment": "jsdom"
+},
+
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
